@@ -23,7 +23,9 @@ def rewind_vkd3d(commits):
 def get_vkd3d_commit() -> str:
     source = get_source_path()
     return (
-        subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], cwd=source)
+        subprocess.check_output(
+            ["git", "rev-parse", "--short", "HEAD"], cwd=f"{source}/vkd3d-proton"
+        )
         .decode("ascii")
         .strip()
     )
