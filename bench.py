@@ -39,7 +39,17 @@ if __name__ == "__main__":
         os.mkdir(data_dir)
 
     while True:
-        proton.rebuild()
+        max_build_attempts = 3
+        for i in range(max_build_attempts):
+            if proton.rebuild():
+                break
+            print(f"make failed for vkd3d {proton.get_vkd3d_commit()}")
+            if i < max_build_attempts - 1:
+                print(f"rewinding another {args.commit_interval} commits")
+                proton.rewind_vkd3d(args.commit_interval)
+            else:
+                print(f"max attempts exceeded")
+                exit(1)
 
         bench.start(args.wait_time)
         bench.run()

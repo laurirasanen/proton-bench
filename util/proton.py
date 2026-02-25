@@ -6,9 +6,10 @@ def get_source_path():
     return os.path.abspath("../proton")
 
 
-def rebuild():
+def rebuild() -> bool:
     source = get_source_path()
-    os.system(f"cd {source} && make install > make.log 2>&1")
+    retval = os.system(f"cd {source} && make install > make.log 2>&1")
+    return retval == 0
 
 
 def rewind_vkd3d(commits):
