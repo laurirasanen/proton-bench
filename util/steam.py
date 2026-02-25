@@ -79,7 +79,7 @@ def get_game_dir(appid):
 def get_game_compat_dir(appid):
     libraries = get_library_dirs()
     for lib_path in libraries:
-        compatdata_path = os.path.join(lib_path, "steamapps", "compatdata", appid)
+        compatdata_path = os.path.join(lib_path, "steamapps", "compatdata", str(appid))
         if os.path.exists(compatdata_path):
             break
     if not os.path.exists(compatdata_path):
