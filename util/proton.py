@@ -8,7 +8,7 @@ def get_source_path():
 
 def rebuild():
     source = get_source_path()
-    os.system(f"cd {source} && make install")
+    os.system(f"cd {source} && make install > make.log 2&1")
 
 
 def rewind_vkd3d(commits):
