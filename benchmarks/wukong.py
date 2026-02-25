@@ -8,7 +8,7 @@ import time
 import glob
 import json
 
-from util import steam, input
+from util import steam, input, proton
 
 
 class BenchWukong:
@@ -51,7 +51,13 @@ class BenchWukong:
 
         # find the latest bench result
         benchmark_dir = steam.get_wine_user_dir(
-            BenchWukong.appid, "AppData", "Local", "Temp", "b1", "BenchMarkHistory", "Tool"
+            BenchWukong.appid,
+            "AppData",
+            "Local",
+            "Temp",
+            "b1",
+            "BenchMarkHistory",
+            "Tool",
         )
         result_files = glob.glob("*", root_dir=benchmark_dir)
         assert len(result_files) > 0, f"No bench results in {benchmark_dir}"
