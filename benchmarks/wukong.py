@@ -20,6 +20,7 @@ class BenchWukong:
 
     def stop():
         os.system("killall b1_benchmark.exe")
+        os.system("killall gamescope-wl")
         time.sleep(3)
 
     def run():
