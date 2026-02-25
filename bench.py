@@ -32,11 +32,11 @@ if __name__ == "__main__":
     if os.path.exists(data_dir):
         os.mkdir(data_dir)
 
-    #while True:
-        #proton.rebuild()
+    while True:
+        proton.rebuild()
 
-    bench.start()
-    bench.run()
-    bench.stop()
+        bench.start()
+        bench.run()
+        bench.stop()
 
-        #proton.rewind_vkd3d(args.commit_interval)
+        proton.rewind_vkd3d(args.commit_interval)
