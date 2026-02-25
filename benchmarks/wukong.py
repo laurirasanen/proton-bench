@@ -19,9 +19,12 @@ class BenchWukong:
         time.sleep(wait_time)
 
     def stop():
-        os.system("killall b1_benchmark.exe")
-        os.system("killall gamescope-wl")
+        os.system("killall --signal SIGTERM b1_benchmark.exe")
+        os.system("killall --signal SIGTERM gamescope-wl")
         time.sleep(3)
+        os.system("killall --signal SIGKILL b1_benchmark.exe")
+        os.system("killall --signal SIGKILL gamescope-wl")
+        time.sleep(1)
 
     def run():
         client = input.InputClient.create()
