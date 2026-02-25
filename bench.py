@@ -21,6 +21,12 @@ if __name__ == "__main__":
         choices=["wukong"],
         help="The benchmark to run.",
     )
+    parser.add_argument(
+        "-w",
+        "--wait_time",
+        default=60,
+        help="Game launch wait time.",
+    )
     args = parser.parse_args()
 
     if args.benchmark == "wukong":
@@ -35,7 +41,7 @@ if __name__ == "__main__":
     while True:
         proton.rebuild()
 
-        bench.start()
+        bench.start(args.wait_time)
         bench.run()
         bench.stop()
 

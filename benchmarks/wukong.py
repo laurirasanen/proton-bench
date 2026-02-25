@@ -12,9 +12,9 @@ from util import steam, input
 
 
 class BenchWukong:
-    def start():
+    def start(wait_time):
         steam.launch_game(3132990)
-        time.sleep(30)
+        time.sleep(wait_time)
 
     def stop():
         os.system("killall b1_benchmark.exe")
