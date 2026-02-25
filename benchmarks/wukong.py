@@ -51,6 +51,9 @@ class BenchWukong:
 
         # wait for bench to finish
         time.sleep(160)
+        # shouldn't need the game anymore at this point
+        # stop burning gpu...
+        BenchWukong.stop()
 
         # find the latest bench result
         benchmark_dir = steam.get_wine_user_dir(
