@@ -35,7 +35,7 @@ if __name__ == "__main__":
         error(f"unknown bench {args.benchmark}")
 
     data_dir = os.path.abspath("data")
-    if os.path.exists(data_dir):
+    if not os.path.exists(data_dir):
         os.mkdir(data_dir)
 
     while True:
