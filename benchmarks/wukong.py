@@ -1,5 +1,7 @@
 """
-Steam launch arguments:
+Steam:
+Select local proton build as the compatibility tool.
+Launch arguments:
 gamescope -W 1920 -w 1920 -H 1080 -h 1080 --force-grab-cursor -- %command%
 """
 
