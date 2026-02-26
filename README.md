@@ -1,9 +1,20 @@
 # vkd3d-bench
 
+Experimental benchmark automation for vkd3d-proton.
+
+![graph](./graphs/wukong-2026-02-26.png)
+
+## Benchmarks
+
+Currently supported titles:
+
+- Black Myth: Wukong Benchmark Tool (3132990)
+
 ## Dependencies
 
 - python3
 - gamescope compiled with `-D input_emulation=enabled`
+- proton, assumed to be at `../proton`
 
 ## Usage
 
@@ -29,4 +40,12 @@ Run benchmarks:
 
 ```sh
 python bench.py
+```
+
+For individual bench dependencies, see top of the source file in ./benchmarks.
+
+Create a graph:
+
+```sh
+python graph.py
 ```
