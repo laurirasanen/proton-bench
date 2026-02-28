@@ -54,6 +54,9 @@ class BenchWukong:
         # wait for bench to finish
         time.sleep(160)
 
+        _parse()
+
+    def _parse():
         # find the latest bench result
         benchmark_dir = steam.get_wine_user_dir(
             BenchWukong.appid,
@@ -85,19 +88,29 @@ class BenchWukong:
                         f"result {latest_filename} already included in results"
                     )
 
-        # parse latest bench
+        # parse benchmark file
         result_path = os.path.join(benchmark_dir, latest_filename)
         with open(result_path, "r") as bench_file:
             bench_text = bench_file.read()
             result = json.loads(bench_text)
 
+        result["Records"].sort(key=lambda rec: rec["FrameRate"])
+
+        def avg_num(num):
+            avg = 0.0
+            for i in range(num):
+                avg += result["Records"][i]["FrameRate"]
+            avg /= num
+            return avg
+
+        frame_count = len(result["Records"])
+        p01_low = avg_num(int(frame_count / 1000))
+        p1_low = avg_num(int(frame_count / 100))
+        avg = avg_num(frame_count)
+
         # append to result file
-        result_keys = ["FPSAvg", "FPSMax", "FPSMin", "FPS95"]
         commit_hash = proton.get_vkd3d_commit()
-        result_line = f"{latest_filename} {commit_hash}"
-        for k in result_keys:
-            assert k in result, f"key {k} not in result json"
-            result_line += f" {result[k]}"
+        result_line = f"{latest_filename} {commit_hash} {avg} {p1_low} {p01_low}"
 
         with open(output_path, "a") as output_file:
             output_file.write(f"{result_line}\n")

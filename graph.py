@@ -9,18 +9,16 @@ def graph_wukong():
     data_path = os.path.abspath("data/result_wukong")
     commits = []
     avg_fps = []
-    max_fps = []
-    min_fps = []
-    p5_fps = []
+    p1_fps = []
+    p01_fps = []
     with open(data_path, "r") as data_file:
         lines = reversed(data_file.readlines())
         for l in lines:
             values = l.strip().split(" ")
             commits.append(values[1])
-            avg_fps.append(int(values[2]))
-            max_fps.append(int(values[3]))
-            min_fps.append(int(values[4]))
-            p5_fps.append(int(values[5]))
+            avg_fps.append(float(values[2]))
+            p1_fps.append(float(values[3]))
+            p01_fps.append(float(values[4]))
 
     plt.title("vkd3d-proton | Black Myth: Wukong Benchmark")
     plt.ylabel("FPS")
@@ -28,12 +26,11 @@ def graph_wukong():
 
     plt.tick_params(axis="x", labelrotation=90)
 
-    line_max = plt.plot(commits, max_fps, label="max")[0]
     line_avg = plt.plot(commits, avg_fps, label="avg")[0]
-    line_p5 = plt.plot(commits, p5_fps, label="5% low")[0]
-    line_min = plt.plot(commits, min_fps, label="min")[0]
+    line_p1 = plt.plot(commits, p1_fps, label="1% low")[0]
+    line_p01 = plt.plot(commits, p01_fps, label="0.1% low")[0]
 
-    plt.legend(handles=[line_max, line_avg, line_p5, line_min], ncols=4)
+    plt.legend(handles=[line_avg, line_p1, line_p01], ncols=3)
 
     plt.show()
 
