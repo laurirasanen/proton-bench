@@ -51,11 +51,11 @@ class BenchBaldurs:
         # mangoapp log
         key_f1 = 59
         key_f2 = 60
-        client.keyboard_key(key_f2)
+        client.keyboard_key(key_f2, 0.1)
         client.sleep(1)
-        client.keyboard_key(key_f1)
+        client.keyboard_key(key_f1, 0.1)
         client.sleep(run_time)
-        client.keyboard_key(key_f1)
+        client.keyboard_key(key_f1, 0.1)
 
         client.disconnect()
 

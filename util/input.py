@@ -21,6 +21,10 @@ def VERSION_V(v):
     return v
 
 
+def time_micro():
+    return int(time.time() * 1_000_000)
+
+
 @dataclass
 class InputClient:
     sock: socket.socket
@@ -96,31 +100,35 @@ class InputClient:
         assert self.devices[0].ready is True
         logger.info(f"Sending abs ptr [{x}, {y}]")
         self.send(self.pointer_absolute.MotionAbsolute(x, y))
-        self.send(self.devices[0].Frame(self.devices[0].serial, int(time.time())))
+        self.send(self.devices[0].Frame(self.devices[0].serial, time_micro()))
         self.dispatch()
 
     # see linux/input-event-codes.h
-    def mouse_button(self, butt: u):
+    def mouse_button(self, butt: u, hold_time=0):
         assert self.button is not None
         assert self.devices[0].ready is True
         logger.info(f"Sending mouse button {butt}")
         self.send(self.button.Button(butt, EiButton.EiButtonState.PRESS))
-        self.send(self.devices[0].Frame(self.devices[0].serial, int(time.time())))
+        self.send(self.devices[0].Frame(self.devices[0].serial, time_micro()))
         self.dispatch()
+        if hold_time > 0:
+            self.sleep(hold_time)
         self.send(self.button.Button(butt, EiButton.EiButtonState.RELEASED))
-        self.send(self.devices[0].Frame(self.devices[0].serial, int(time.time())))
+        self.send(self.devices[0].Frame(self.devices[0].serial, time_micro()))
         self.dispatch()
 
     # see linux/input-event-codes.h
-    def keyboard_key(self, key: u):
+    def keyboard_key(self, key: u, hold_time=0):
         assert self.keyboard is not None
         assert self.devices[0].ready is True
         logger.info(f"Sending keyboard key {key}")
         self.send(self.keyboard.Key(key, EiKeyboard.EiKeyState.PRESS))
-        self.send(self.devices[0].Frame(self.devices[0].serial, int(time.time())))
+        self.send(self.devices[0].Frame(self.devices[0].serial, time_micro()))
         self.dispatch()
+        if hold_time > 0:
+            self.sleep(hold_time)
         self.send(self.keyboard.Key(key, EiKeyboard.EiKeyState.RELEASED))
-        self.send(self.devices[0].Frame(self.devices[0].serial, int(time.time())))
+        self.send(self.devices[0].Frame(self.devices[0].serial, time_micro()))
         self.dispatch()
 
     @property
