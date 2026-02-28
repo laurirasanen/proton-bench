@@ -49,7 +49,7 @@ class InputClient:
         setup = self.handshake
         self.send(setup.HandshakeVersion(VERSION_V(1)))
         self.send(setup.ContextType(EiHandshake.EiContextType.SENDER))
-        self.send(setup.Name("vkd3d-bench"))
+        self.send(setup.Name("proton-bench"))
         for interface in [
             InterfaceName.EI_CONNECTION,
             InterfaceName.EI_CALLBACK,

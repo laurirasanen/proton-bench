@@ -5,7 +5,7 @@ Steam:
 Select local proton build as the compatibility tool.
 
 Launch arguments:
-MANGOHUD_CONFIG=output_folder=/path/to/vkd3d-bench/data/mango,fps_metrics=avg+0.01+0.001,toggle_logging=F1,reset_fps_metrics=F2 gamescope --mangoapp -W 1920 -w 1920 -H 1080 -h 1080 --force-grab-cursor -- %command% --skip-launcher
+MANGOHUD_CONFIG=output_folder=/path/to/proton-bench/data/mango,fps_metrics=avg+0.01+0.001,toggle_logging=F1,reset_fps_metrics=F2 gamescope --mangoapp -W 1920 -w 1920 -H 1080 -h 1080 --force-grab-cursor -- %command% --skip-launcher
 """
 
 import os
