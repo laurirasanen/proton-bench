@@ -94,7 +94,7 @@ class BenchBaldurs:
             avg = values[3]
 
         # append to result file
-        commit_hash = proton.get_vkd3d_commit()
+        commit_hash = proton.get_dxvk_commit()
         result_line = f"{latest_filename} {commit_hash} {avg} {p1_low} {p01_low}"
 
         with open(output_path, "a") as output_file:

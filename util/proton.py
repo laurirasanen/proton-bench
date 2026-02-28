@@ -30,3 +30,23 @@ def get_vkd3d_commit() -> str:
         .decode("ascii")
         .strip()
     )
+
+
+def rewind_dxvk(commits):
+    source = get_source_path()
+    os.system(
+        f"cd {source}/dxvk &&\
+        git reset HEAD~{commits} --hard &&\
+        git submodule update --recursive --init"
+    )
+
+
+def get_dxvk_commit() -> str:
+    source = get_source_path()
+    return (
+        subprocess.check_output(
+            ["git", "rev-parse", "--short", "HEAD"], cwd=f"{source}/dxvk"
+        )
+        .decode("ascii")
+        .strip()
+    )

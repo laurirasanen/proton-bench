@@ -50,7 +50,7 @@ def graph_baldurs():
             p1_fps.append(float(values[3]))
             p01_fps.append(float(values[4]))
 
-    plt.title("vkd3d-proton | Baldurs Gate 3 Benchmark")
+    plt.title("dxvk | Baldurs Gate 3 Benchmark")
     plt.ylabel("FPS")
     plt.xlabel("Commit")
 

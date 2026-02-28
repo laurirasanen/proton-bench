@@ -41,8 +41,10 @@ if __name__ == "__main__":
 
     if args.benchmark == "wukong":
         bench = BenchWukong
+        compat_layer = "vkd3d"
     elif args.benchmark == "baldurs":
         bench = BenchBaldurs
+        compat_layer = "dxvk"
     else:
         error(f"unknown bench {args.benchmark}")
 
@@ -53,15 +55,22 @@ if __name__ == "__main__":
     if not os.path.exists(mango_dir):
         os.mkdir(mango_dir)
 
+    if compat_layer == "dxvk":
+        func_rewind = proton.rewind_dxvk
+        func_commit = proton.get_dxvk_commit
+    else:
+        func_rewind = proton.rewind_vkd3d
+        func_commit = proton.get_vkd3d_commit
+
     while True:
         max_build_attempts = 3
         for i in range(max_build_attempts):
             if proton.rebuild():
                 break
-            print(f"make failed for vkd3d {proton.get_vkd3d_commit()}")
+            print(f"make failed for {compat_layer} {func_commit()}")
             if i < max_build_attempts - 1:
                 print(f"rewinding another {args.commit_interval} commits")
-                proton.rewind_vkd3d(args.commit_interval)
+                func_rewind(args.commit_interval)
             else:
                 print(f"max attempts exceeded")
                 exit(1)
@@ -70,4 +79,4 @@ if __name__ == "__main__":
         bench.run(args.run_time)
         bench.stop()
 
-        proton.rewind_vkd3d(args.commit_interval)
+        func_rewind(args.commit_interval)
