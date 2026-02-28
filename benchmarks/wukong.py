@@ -54,7 +54,7 @@ class BenchWukong:
         # wait for bench to finish
         time.sleep(160)
 
-        _parse()
+        BenchWukong._parse()
 
     def _parse():
         # find the latest bench result
