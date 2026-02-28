@@ -1,6 +1,6 @@
-# vkd3d-bench
+# proton-bench
 
-Experimental benchmark automation for vkd3d-proton.
+Experimental benchmark automation for proton.
 
 ![graph](./graphs/wukong-2026-02-26.png)
 
@@ -9,11 +9,13 @@ Experimental benchmark automation for vkd3d-proton.
 Currently supported titles:
 
 - Black Myth: Wukong Benchmark Tool (3132990)
+- Baldurs Gate 3 (1086940)
 
 ## Dependencies
 
 - python3
 - gamescope compiled with `-D input_emulation=enabled`
+- mangoapp
 - proton, assumed to be at `../proton`
 
 ## Usage
@@ -24,16 +26,6 @@ Install python dependencies:
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-```
-
-Update libei bindings:
-
-```sh
-python libei/proto/ei-scanner \
-    --component ei \
-    --output util/libei_bindings.py \
-    libei/proto/protocol.xml \
-    libei/test/eiproto.py.tmpl
 ```
 
 Run benchmarks: 
@@ -48,4 +40,14 @@ Create a graph:
 
 ```sh
 python graph.py
+```
+
+Updating libei bindings:
+
+```sh
+python libei/proto/ei-scanner \
+    --component ei \
+    --output util/libei_bindings.py \
+    libei/proto/protocol.xml \
+    libei/test/eiproto.py.tmpl
 ```
