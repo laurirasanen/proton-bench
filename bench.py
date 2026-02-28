@@ -4,6 +4,7 @@ import argparse
 import os
 
 from benchmarks.wukong import BenchWukong
+from benchmarks.baldurs import BenchBaldurs
 from util import proton, input
 
 if __name__ == "__main__":
@@ -11,32 +12,46 @@ if __name__ == "__main__":
     parser.add_argument(
         "-c",
         "--commit_interval",
-        default=100,
+        default=50,
+        type=int,
         help="Commit interval to rewind for each benchmark pass.",
     )
     parser.add_argument(
         "-b",
         "--benchmark",
         default="wukong",
-        choices=["wukong"],
+        choices=["wukong", "baldurs"],
         help="The benchmark to run.",
     )
     parser.add_argument(
         "-w",
         "--wait_time",
         default=60,
+        type=int,
         help="Game launch wait time.",
+    )
+    parser.add_argument(
+        "-r",
+        "--run_time",
+        default=60,
+        type=int,
+        help="Game bench run time, if applicable.",
     )
     args = parser.parse_args()
 
     if args.benchmark == "wukong":
         bench = BenchWukong
+    elif args.benchmark == "baldurs":
+        bench = BenchBaldurs
     else:
         error(f"unknown bench {args.benchmark}")
 
     data_dir = os.path.abspath("data")
     if not os.path.exists(data_dir):
         os.mkdir(data_dir)
+    mango_dir = os.path.abspath("data/mango")
+    if not os.path.exists(mango_dir):
+        os.mkdir(mango_dir)
 
     while True:
         max_build_attempts = 3
@@ -52,7 +67,7 @@ if __name__ == "__main__":
                 exit(1)
 
         bench.start(args.wait_time)
-        bench.run()
+        bench.run(args.run_time)
         bench.stop()
 
         proton.rewind_vkd3d(args.commit_interval)

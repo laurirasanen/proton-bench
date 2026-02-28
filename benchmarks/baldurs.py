@@ -1,8 +1,11 @@
 """
+Baldurs Gate 3
+
 Steam:
 Select local proton build as the compatibility tool.
+
 Launch arguments:
-gamescope -W 1920 -w 1920 -H 1080 -h 1080 --force-grab-cursor -- %command%
+MANGOHUD_CONFIG=output_folder=/path/to/vkd3d-bench/data/mango,fps_metrics=avg+0.01+0.001,toggle_logging=F1,reset_fps_metrics=F2 gamescope --mangoapp -W 1920 -w 1920 -H 1080 -h 1080 --force-grab-cursor -- %command% --skip-launcher
 """
 
 import os
@@ -13,18 +16,18 @@ import json
 from util import steam, input, proton
 
 
-class BenchWukong:
-    appid = 3132990
+class BenchBaldurs:
+    appid = 1086940
 
     def start(wait_time):
-        steam.launch_game(BenchWukong.appid)
+        steam.launch_game(BenchBaldurs.appid)
         time.sleep(wait_time)
 
     def stop():
-        os.system("killall --signal SIGTERM b1_benchmark.exe")
+        os.system("killall --signal SIGTERM bg3_dx11.exe")
         os.system("killall --signal SIGTERM gamescope-wl")
         time.sleep(3)
-        os.system("killall --signal SIGKILL b1_benchmark.exe")
+        os.system("killall --signal SIGKILL bg3_dx11.exe")
         os.system("killall --signal SIGKILL gamescope-wl")
         time.sleep(1)
 
@@ -38,44 +41,35 @@ class BenchWukong:
         client.keyboard_key(key_enter)
         client.sleep(3)
 
-        # click 'Benchmark'
-        client.pointer_motion_absolute(150.0, 480.0)
+        # click 'Continue'
+        client.pointer_motion_absolute(380.0, 480.0)
         client.sleep(0.5)
         btn_left = 272
         client.mouse_button(btn_left)
-        client.sleep(1)
+        client.sleep(20)
 
-        # 'Confirm'
-        client.keyboard_key(key_enter)
+        # mangoapp log
+        key_f1 = 59
+        key_f2 = 60
+        client.keyboard_key(key_f2)
         client.sleep(1)
+        client.keyboard_key(key_f1)
+        client.sleep(run_time)
+        client.keyboard_key(key_f1)
 
         client.disconnect()
 
-        # wait for bench to finish
-        time.sleep(160)
-
-        BenchWukong._parse()
+        BenchBaldurs._parse()
 
     def _parse():
         # find the latest bench result
-        benchmark_dir = steam.get_wine_user_dir(
-            BenchWukong.appid,
-            "AppData",
-            "Local",
-            "Temp",
-            "b1",
-            "BenchMarkHistory",
-            "Tool",
-        )
-        result_files = glob.glob("*", root_dir=benchmark_dir)
+        benchmark_dir = os.path.abspath("data/mango")
+        result_files = glob.glob(f"{benchmark_dir}/*_summary.csv")
         assert len(result_files) > 0, f"No bench results in {benchmark_dir}"
-        # the file names should seconds since epoch
-        latest_filename = None
-        for f in result_files:
-            if latest_filename is None or int(f) > int(latest_filename):
-                latest_filename = f
 
-        output_path = os.path.abspath("data/result_wukong")
+        latest_filename = max(result_files, key=os.path.getctime).split("/")[-1]
+
+        output_path = os.path.abspath("data/result_baldurs")
 
         # sanity check
         if os.path.exists(output_path):
@@ -90,23 +84,14 @@ class BenchWukong:
 
         # parse benchmark file
         result_path = os.path.join(benchmark_dir, latest_filename)
+        avg = 0.0
+        p1_low = 0.0
+        p01_low = 0.0
         with open(result_path, "r") as bench_file:
-            bench_text = bench_file.read()
-            result = json.loads(bench_text)
-
-        result["Records"].sort(key=lambda rec: rec["FrameRate"])
-
-        def avg_num(num):
-            avg = 0.0
-            for i in range(num):
-                avg += result["Records"][i]["FrameRate"]
-            avg /= num
-            return avg
-
-        frame_count = len(result["Records"])
-        p01_low = avg_num(int(frame_count / 1000))
-        p1_low = avg_num(int(frame_count / 100))
-        avg = avg_num(frame_count)
+            values = bench_file.readlines()[1].split(",")
+            p01_low = values[0]
+            p1_low = values[1]
+            avg = values[3]
 
         # append to result file
         commit_hash = proton.get_vkd3d_commit()
