@@ -12,7 +12,7 @@ from util.libei_bindings import *
 
 
 logger = structlog.get_logger()
-min_log_level = logging.INFO # change for debugging eis
+min_log_level = logging.INFO  # change for debugging eis
 structlog.configure(wrapper_class=structlog.make_filtering_bound_logger(min_log_level))
 
 
@@ -105,6 +105,8 @@ class InputClient:
         assert self.devices[0].ready is True
         logger.info(f"Sending mouse button {butt}")
         self.send(self.button.Button(butt, EiButton.EiButtonState.PRESS))
+        self.send(self.devices[0].Frame(self.devices[0].serial, int(time.time())))
+        self.dispatch()
         self.send(self.button.Button(butt, EiButton.EiButtonState.RELEASED))
         self.send(self.devices[0].Frame(self.devices[0].serial, int(time.time())))
         self.dispatch()
@@ -115,6 +117,8 @@ class InputClient:
         assert self.devices[0].ready is True
         logger.info(f"Sending keyboard key {key}")
         self.send(self.keyboard.Key(key, EiKeyboard.EiKeyState.PRESS))
+        self.send(self.devices[0].Frame(self.devices[0].serial, int(time.time())))
+        self.dispatch()
         self.send(self.keyboard.Key(key, EiKeyboard.EiKeyState.RELEASED))
         self.send(self.devices[0].Frame(self.devices[0].serial, int(time.time())))
         self.dispatch()
