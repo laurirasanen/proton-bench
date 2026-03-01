@@ -2,7 +2,7 @@
 
 Experimental benchmark automation for proton.
 
-![graph](./graphs/wukong-2026-02-26.png)
+![graph](./graphs/baldurs-2026-03-01.png)
 
 ## Benchmarks
 
