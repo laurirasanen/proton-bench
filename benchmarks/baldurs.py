@@ -21,9 +21,11 @@ class BenchBaldurs:
 
     def start(wait_time):
         steam.launch_game(BenchBaldurs.appid)
+        print(f"waiting for {wait_time}s")
         time.sleep(wait_time)
 
     def stop():
+        print("killing the game")
         os.system("killall --signal SIGTERM bg3_dx11.exe")
         os.system("killall --signal SIGTERM gamescope-wl")
         time.sleep(3)

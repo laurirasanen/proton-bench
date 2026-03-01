@@ -7,8 +7,11 @@ def get_source_path():
 
 
 def rebuild() -> bool:
+    print("building proton")
     source = get_source_path()
     retval = os.system(f"cd {source} && make install > make.log 2>&1")
+    if retval != 0:
+        printf(f"build failed, check {source}/make.log")
     return retval == 0
 
 

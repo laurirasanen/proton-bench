@@ -93,6 +93,7 @@ if __name__ == "__main__":
                 print(f"max attempts exceeded")
                 exit(1)
 
+        print(f"starting pass {commit_pass} for {compat_layer} commit {func_commit()}")
         bench.start(args.wait_time)
         bench.run(args.run_time, commit_pass)
         bench.stop()

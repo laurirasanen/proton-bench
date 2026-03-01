@@ -18,9 +18,11 @@ class BenchWukong:
 
     def start(wait_time):
         steam.launch_game(BenchWukong.appid)
+        print(f"waiting for {wait_time}s")
         time.sleep(wait_time)
 
     def stop():
+        print("killing the game")
         os.system("killall --signal SIGTERM b1_benchmark.exe")
         os.system("killall --signal SIGTERM gamescope-wl")
         time.sleep(3)
