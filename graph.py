@@ -25,6 +25,7 @@ def graph_wukong():
     plt.xlabel("Commit")
 
     plt.tick_params(axis="x", labelrotation=90)
+    plt.grid(color="#000000", alpha=0.25, linestyle=":", linewidth=1)
 
     line_avg = plt.plot(commits, avg_fps, label="avg")[0]
     line_p1 = plt.plot(commits, p1_fps, label="1% low")[0]
@@ -55,6 +56,7 @@ def graph_baldurs():
     plt.xlabel("Commit")
 
     plt.tick_params(axis="x", labelrotation=90)
+    plt.grid(color="#000000", alpha=0.25, linestyle=":", linewidth=1)
 
     line_avg = plt.plot(commits, avg_fps, label="avg")[0]
     line_p1 = plt.plot(commits, p1_fps, label="1% low")[0]
