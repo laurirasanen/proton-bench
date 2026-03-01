@@ -17,6 +17,13 @@ if __name__ == "__main__":
         help="Commit interval to rewind for each benchmark pass.",
     )
     parser.add_argument(
+        "-l",
+        "--commit_limit",
+        default=0,
+        type=int,
+        help="Number of commits to check. 0 = unlimited",
+    )
+    parser.add_argument(
         "-b",
         "--benchmark",
         default="wukong",
@@ -37,6 +44,7 @@ if __name__ == "__main__":
         type=int,
         help="Game bench run time, if applicable.",
     )
+
     args = parser.parse_args()
 
     if args.benchmark == "wukong":
@@ -62,6 +70,7 @@ if __name__ == "__main__":
         func_rewind = proton.rewind_vkd3d
         func_commit = proton.get_vkd3d_commit
 
+    commit_count = 0
     while True:
         max_build_attempts = 3
         for i in range(max_build_attempts):
@@ -78,5 +87,10 @@ if __name__ == "__main__":
         bench.start(args.wait_time)
         bench.run(args.run_time)
         bench.stop()
+
+        commit_count += 1
+        if args.commit_limit > 0 and commit_count >= args.commit_limit:
+            print(f"Done checking {args.commit_limit} commits")
+            break
 
         func_rewind(args.commit_interval)
