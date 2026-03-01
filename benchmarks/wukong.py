@@ -28,7 +28,7 @@ class BenchWukong:
         os.system("killall --signal SIGKILL gamescope-wl")
         time.sleep(1)
 
-    def run(run_time):
+    def run(run_time, commit_pass):
         client = input.InputClient.create()
         client.connect()
         client.sleep(1)
@@ -54,9 +54,9 @@ class BenchWukong:
         # wait for bench to finish
         time.sleep(160)
 
-        BenchWukong._parse()
+        BenchWukong._parse(commit_pass)
 
-    def _parse():
+    def _parse(commit_pass):
         # find the latest bench result
         benchmark_dir = steam.get_wine_user_dir(
             BenchWukong.appid,
@@ -110,6 +110,8 @@ class BenchWukong:
 
         # append to result file
         commit_hash = proton.get_vkd3d_commit()
+        if commit_pass > 0:
+            commit_hash += f"_{commit_pass}"
         result_line = f"{latest_filename} {commit_hash} {avg} {p1_low} {p01_low}"
 
         with open(output_path, "a") as output_file:

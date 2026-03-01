@@ -31,7 +31,7 @@ class BenchBaldurs:
         os.system("killall --signal SIGKILL gamescope-wl")
         time.sleep(1)
 
-    def run(run_time):
+    def run(run_time, commit_pass):
         client = input.InputClient.create()
         client.connect()
         client.sleep(1)
@@ -59,9 +59,9 @@ class BenchBaldurs:
 
         client.disconnect()
 
-        BenchBaldurs._parse()
+        BenchBaldurs._parse(commit_pass)
 
-    def _parse():
+    def _parse(commit_pass):
         # find the latest bench result
         benchmark_dir = os.path.abspath("data/mango")
         result_files = glob.glob(f"{benchmark_dir}/*_summary.csv")
@@ -95,6 +95,8 @@ class BenchBaldurs:
 
         # append to result file
         commit_hash = proton.get_dxvk_commit()
+        if commit_pass > 0:
+            commit_hash += f"_{commit_pass}"
         result_line = f"{latest_filename} {commit_hash} {avg} {p1_low} {p01_low}"
 
         with open(output_path, "a") as output_file:

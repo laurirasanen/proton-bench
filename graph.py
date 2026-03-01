@@ -13,12 +13,25 @@ def graph_wukong():
     p01_fps = []
     with open(data_path, "r") as data_file:
         lines = reversed(data_file.readlines())
+        commit_pass = 1
         for l in lines:
             values = l.strip().split(" ")
-            commits.append(values[1])
-            avg_fps.append(float(values[2]))
-            p1_fps.append(float(values[3]))
-            p01_fps.append(float(values[4]))
+            commit = values[1].split("_")[0]
+            if (
+                len(commits) > 0
+                and commit == commits[-1]
+            ):
+                commit_pass += 1
+                weight = 1.0 / commit_pass
+                avg_fps[-1] = avg_fps[-1] * (1.0 - weight) + float(values[2]) * weight
+                p1_fps[-1] = p1_fps[-1] * (1.0 - weight) + float(values[3]) * weight
+                p01_fps[-1] = p01_fps[-1] * (1.0 - weight) + float(values[4]) * weight
+            else:
+                commit_pass = 1
+                commits.append(commit)
+                avg_fps.append(float(values[2]))
+                p1_fps.append(float(values[3]))
+                p01_fps.append(float(values[4]))
 
     plt.title("vkd3d-proton | Black Myth: Wukong Benchmark")
     plt.ylabel("FPS")
@@ -44,12 +57,25 @@ def graph_baldurs():
     p01_fps = []
     with open(data_path, "r") as data_file:
         lines = reversed(data_file.readlines())
+        commit_pass = 1
         for l in lines:
             values = l.strip().split(" ")
-            commits.append(values[1])
-            avg_fps.append(float(values[2]))
-            p1_fps.append(float(values[3]))
-            p01_fps.append(float(values[4]))
+            commit = values[1].split("_")[0]
+            if (
+                len(commits) > 0
+                and commit == commits[-1]
+            ):
+                commit_pass += 1
+                weight = 1.0 / commit_pass
+                avg_fps[-1] = avg_fps[-1] * (1.0 - weight) + float(values[2]) * weight
+                p1_fps[-1] = p1_fps[-1] * (1.0 - weight) + float(values[3]) * weight
+                p01_fps[-1] = p01_fps[-1] * (1.0 - weight) + float(values[4]) * weight
+            else:
+                commit_pass = 1
+                commits.append(commit)
+                avg_fps.append(float(values[2]))
+                p1_fps.append(float(values[3]))
+                p01_fps.append(float(values[4]))
 
     plt.title("dxvk | Baldurs Gate 3 Benchmark")
     plt.ylabel("FPS")
