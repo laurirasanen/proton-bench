@@ -88,8 +88,8 @@ class BenchApitrace:
             # apitrace will randomly produce ridiculous fps values.
             # just drop the top 5% so it doesn't make the average go wild.
             framecount = math.floor(len(fps) * 0.95)
-            print(f"reduce frames {len(fps)} -> {framecount}")
-            print(f"max fps: {fps[framecount - 1]}")
+            print(f"fudge: framecount {len(fps)} -> {framecount}")
+            print(f"fudge: max fps {fps[-1]} -> {fps[framecount - 1]}")
             p01_count = min(framecount - 1, math.ceil(framecount * 0.001))
             p1_count = min(framecount - 1, math.ceil(framecount * 0.01))
 
