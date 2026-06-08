@@ -10,18 +10,21 @@ import time
 import glob
 import json
 
-from util import steam, input, proton
+from util import steam, input
 
 
 class BenchWukong:
     appid = 3132990
 
-    def start(wait_time):
+    def __init__(self, proton):
+        self.proton = proton
+
+    def start(self, wait_time):
         steam.launch_game(BenchWukong.appid)
         print(f"waiting for {wait_time}s")
         time.sleep(wait_time)
 
-    def stop():
+    def stop(self):
         print("killing the game")
         os.system("killall --signal SIGTERM b1_benchmark.exe")
         os.system("killall --signal SIGTERM gamescope-wl")
@@ -30,7 +33,7 @@ class BenchWukong:
         os.system("killall --signal SIGKILL gamescope-wl")
         time.sleep(1)
 
-    def run(run_time, commit_pass):
+    def run(self, run_time, commit_pass):
         client = input.InputClient.create()
         client.connect()
         client.sleep(1)
@@ -56,9 +59,9 @@ class BenchWukong:
         # wait for bench to finish
         time.sleep(160)
 
-        BenchWukong._parse(commit_pass)
+        self._parse(commit_pass)
 
-    def _parse(commit_pass):
+    def _parse(self, commit_pass):
         # find the latest bench result
         benchmark_dir = steam.get_wine_user_dir(
             BenchWukong.appid,
@@ -111,7 +114,7 @@ class BenchWukong:
         avg = avg_num(frame_count)
 
         # append to result file
-        commit_hash = proton.get_vkd3d_commit()
+        commit_hash = self.proton.get_vkd3d_commit()
         if commit_pass > 0:
             commit_hash += f"_{commit_pass}"
         result_line = f"{latest_filename} {commit_hash} {avg} {p1_low} {p01_low}"

@@ -7,6 +7,10 @@ def launch_game(appid):
     os.system(f"steam -applaunch {appid}")
 
 
+def get_compat_tools_dir():
+    return os.path.expanduser("~/.steam/steam/compatibilitytools.d")
+
+
 def get_library_dirs():
     dirs = []
 

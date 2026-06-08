@@ -13,18 +13,24 @@ import time
 import glob
 import json
 
-from util import steam, input, proton
+from util import steam, input
 
 
 class BenchBaldurs:
     appid = 1086940
 
-    def start(wait_time):
+    def __init__(self, proton, mango_path):
+        self.proton = proton
+        self.mango_path = mango_path
+
+
+    def start(self, wait_time):
         steam.launch_game(BenchBaldurs.appid)
         print(f"waiting for {wait_time}s")
         time.sleep(wait_time)
 
-    def stop():
+
+    def stop(self):
         print("killing the game")
         os.system("killall --signal SIGTERM bg3_dx11.exe")
         os.system("killall --signal SIGTERM gamescope-wl")
@@ -33,7 +39,8 @@ class BenchBaldurs:
         os.system("killall --signal SIGKILL gamescope-wl")
         time.sleep(1)
 
-    def run(run_time, commit_pass):
+
+    def run(self, run_time, commit_pass):
         client = input.InputClient.create()
         client.connect()
         client.sleep(1)
@@ -61,11 +68,12 @@ class BenchBaldurs:
 
         client.disconnect()
 
-        BenchBaldurs._parse(commit_pass)
+        self._parse(commit_pass)
 
-    def _parse(commit_pass):
+
+    def _parse(self, commit_pass):
         # find the latest bench result
-        benchmark_dir = os.path.abspath("data/mango")
+        benchmark_dir = self.mango_path
         result_files = glob.glob(f"{benchmark_dir}/*_summary.csv")
         assert len(result_files) > 0, f"No bench results in {benchmark_dir}"
 
@@ -96,7 +104,7 @@ class BenchBaldurs:
             avg = values[3]
 
         # append to result file
-        commit_hash = proton.get_dxvk_commit()
+        commit_hash = self.proton.get_dxvk_commit()
         if commit_pass > 0:
             commit_hash += f"_{commit_pass}"
         result_line = f"{latest_filename} {commit_hash} {avg} {p1_low} {p01_low}"

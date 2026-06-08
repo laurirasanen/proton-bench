@@ -8,8 +8,9 @@ Experimental benchmark automation for proton.
 
 Currently supported titles:
 
-- Black Myth: Wukong Benchmark Tool (3132990)
+- [Apitrace](https://github.com/apitrace/apitrace)
 - Baldurs Gate 3 (1086940)
+- Black Myth: Wukong Benchmark Tool (3132990)
 
 ## Dependencies
 
